@@ -2,20 +2,20 @@ KrillKounter-rs
 -------------
 
 # Description
-A lightweight utility for monitoring and logging block device stats to a JSON file at a regular time interval. The aim is to have a single and fiarly lightweight binary for monitoring the accumualated usage for wear and tear on embedded devices that are running Linux.
+A lightweight utility for monitoring and logging block device stats to a JSON file at a regular time interval. The aim is to have a single and fairly lightweight binary for monitoring the accumualated usage for wear and tear on embedded devices that are running Linux.
 
 This is a `Rust` rewrite of existing `C++` project, but as it was a small codebase it was actually possible.
 
 # Dependencies
-- See cargo.toml
-- lsblk-2.37.2 mighty be required for correct detection of USB SD card adapters.
+- See [Cargo.toml](Cargo.toml)
+- lsblk-2.37.2 might be required for correct detection of USB SD card adapters.
 
 # Compilation
-1. Clone this repo to a local directory using the following command:  
+1. Clone this repo to a local directory using the following command:
  ```bash
- git clone https://github.com/The-Good-Penguin/tgp-krill-kounter.git
+ git clone https://github.com/The-Good-Penguin/krill-kounter-rs.git
  ```
-2. From inside the local repo directory, run the following command to build KrillKounter:  
+2. From inside the local repo directory, run the following command to build KrillKounter:
  ```bash
  make build
  ```
@@ -26,7 +26,7 @@ This is a `Rust` rewrite of existing `C++` project, but as it was a small codeba
  sudo make install
  ```
 
-2. KrillKounter-rs can be configured by editing `Enviroment` values within  
+2. KrillKounter-rs can be configured by editing `Environment` values within
  `/lib/systemd/system/krill-kounter-rs.service`:
 
 - `KK_CONFIG_JSON_PATH` - path to the JSON file to be used for configuring the daemon -
@@ -74,7 +74,7 @@ Before contributing run the tests using `cargo test`, for that you need to renam
 - `KRILL_KOUNTER_LOG` - the desired debug level.
 
 
-Furthermore initialise the `pre-coommit`[1] hooks by issuing the following commands:
+Furthermore initialise the `pre-commit`[1] hooks by issuing the following commands:
 
 ```bash
 pip install pre-commit
@@ -87,7 +87,7 @@ Then you can commit your changes and issue a PR via github.
 If you believe you have found a security vulnerability, please submit your report to <security@thegoodpenguin.co.uk>
 
 # License
-Licensed unde LGPL-3.0.
+Licensed under MIT
 
 # Maintainer
 Pawel Zalewski <pzalewski@thegoodpenguin.co.uk>
