@@ -1,0 +1,139 @@
+{
+	// Use IntelliSense to learn about possible attributes.
+	// Hover to view descriptions of existing attributes.
+	// For more information, visit: https://go.microsoft.com/fwlink/?linkid=830387
+	"version": "0.2.0",
+	"configurations": [
+		{
+			"type": "lldb",
+			"request": "launch",
+			"name": "Debug unit tests in library 'krillkounter'",
+			"cargo": {
+				"args": [
+					"test",
+					"--no-run",
+					"--lib",
+					"--package=krillkounter"
+				],
+				"filter": {
+					"name": "krillkounter",
+					"kind": "lib"
+				}
+			},
+			"args": [],
+			"cwd": "${workspaceFolder}",
+			"env": {
+				"PATH": "${env:HOME}/.cargo/bin:${env:PATH}"
+			}
+		},
+		{
+			"type": "lldb",
+			"request": "launch",
+			"name": "Debug executable 'krill-kounter-rs'",
+			"cargo": {
+				"args": [
+					"build",
+					"--bin=krill-kounter-rs",
+					"--package=krillkounter"
+				],
+				"filter": {
+					"name": "krill-kounter-rs",
+					"kind": "bin"
+				}
+			},
+			"args": [],
+			"cwd": "${workspaceFolder}",
+			"env": {
+				"PATH": "${env:HOME}/.cargo/bin:${env:PATH}"
+			}
+		},
+		{
+			"type": "lldb",
+			"request": "launch",
+			"name": "Debug unit tests in executable 'krill-kounter-rs'",
+			"cargo": {
+				"args": [
+					"test",
+					"--no-run",
+					"--bin=krill-kounter-rs",
+					"--package=krillkounter"
+				],
+				"filter": {
+					"name": "krill-kounter-rs",
+					"kind": "bin"
+				}
+			},
+			"args": [],
+			"cwd": "${workspaceFolder}",
+			"env": {
+				"PATH": "${env:HOME}/.cargo/bin:${env:PATH}"
+			}
+		},
+		{
+			"type": "lldb",
+			"request": "launch",
+			"name": "Debug integration test 'test_config'",
+			"cargo": {
+				"args": [
+					"test",
+					"--no-run",
+					"--test=test_config",
+					"--package=krillkounter"
+				],
+				"filter": {
+					"name": "test_config",
+					"kind": "test"
+				}
+			},
+			"args": [],
+			"cwd": "${workspaceFolder}",
+			"env": {
+				"PATH": "${env:HOME}/.cargo/bin:${env:PATH}"
+			}
+		},
+		{
+			"type": "lldb",
+			"request": "launch",
+			"name": "Debug integration test 'test_device_entry'",
+			"cargo": {
+				"args": [
+					"test",
+					"--no-run",
+					"--test=test_device_entry",
+					"--package=krillkounter"
+				],
+				"filter": {
+					"name": "test_device_entry",
+					"kind": "test"
+				}
+			},
+			"args": [],
+			"cwd": "${workspaceFolder}",
+			"env": {
+				"PATH": "${env:HOME}/.cargo/bin:${env:PATH}"
+			}
+		},
+				{
+			"type": "lldb",
+			"request": "launch",
+			"name": "Debug integration test 'test_app'",
+			"cargo": {
+				"args": [
+					"test",
+					"--no-run",
+					"--test=test_app",
+					"--package=krillkounter"
+				],
+				"filter": {
+					"name": "test_app",
+					"kind": "test"
+				}
+			},
+			"args": [],
+			"cwd": "${workspaceFolder}",
+			"env": {
+				"PATH": "${env:HOME}/.cargo/bin:${env:PATH}"
+			}
+		}
+	]
+}

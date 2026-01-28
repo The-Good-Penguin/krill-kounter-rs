@@ -1,0 +1,17 @@
+[Unit]
+Description=Start the KrillKounter-rs daemon
+StartLimitIntervalSec=300
+StartLimitBurst=3
+
+[Service]
+Type=simple
+Restart=on-failure
+RestartSec=60s
+
+Environment=KK_CONFIG_JSON_PATH=/usr/share/krill-kounter-rs/config.json
+Environment=KRILL_KOUNTER_LOG=info
+
+ExecStart=/usr/bin/krill-kounter-rs -c ${KK_CONFIG_JSON_PATH}
+
+[Install]
+WantedBy=multi-user.target
