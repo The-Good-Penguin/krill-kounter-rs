@@ -433,7 +433,7 @@ pub fn merge_existing_device_stats(
 				"Stats merge: Found existing stats for device {} \n: SN {}",
 				old_entry.current_path, serial_number
 			);
-			debug!("{}", &msg);
+			debug!("{msg}");
 		} else {
 			stats
 				.entry(device_entry.serial_number.clone())
@@ -474,7 +474,7 @@ pub fn update_devices_stats(
 				"Stats: Update stats for device {} SN: {}",
 				entry.current_path, serial_number
 			);
-			debug!("{}", &msg);
+			debug!("{msg}");
 		}
 	}
 
