@@ -4,7 +4,7 @@ use std::path::Path;
 use anyhow::Result;
 use env_logger::{Builder, Env};
 use futures::future::join_all;
-use log::info;
+use log::{error, info};
 
 use tokio::{select, task, time};
 use tokio_util::sync::CancellationToken;
@@ -97,7 +97,13 @@ impl KrillKounter {
 		let results = join_all(tasks)
 			.await
 			.into_iter()
-			.map(|res| res.expect("Task panicked"))
+			.filter_map(|res| match res {
+				Ok(value) => Some(value),
+				Err(err) => {
+					error!("Task has panicked {err}");
+					None
+				}
+			})
 			.collect::<Vec<_>>();
 
 		let ret = update_devices_stats(&results, &mut self.stats)?;
