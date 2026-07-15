@@ -1,7 +1,8 @@
-use std::collections::HashMap;
 use std::io::Read;
+use std::path::Path;
 use std::path::PathBuf;
 use std::sync::Arc;
+use std::{collections::HashMap, os::unix::fs::MetadataExt};
 
 use anyhow::Result;
 use fs_err as fs;
@@ -111,7 +112,9 @@ impl TestRig {
 	async fn test_bytes_written(&self, bytes: u128, units: &str) -> () {
 		let dev_mount = common::get_dev_mount();
 
-		let initial_stats = self.read_daemon_stats().await.unwrap();
+		let initial_stats = self.read_daemon_stats().unwrap();
+
+		let initial_bytes = self.read_block_device_write_sectors() as u128 * common::SECTOR_SIZE;
 
 		assert!(units == "M" || units == "k");
 
@@ -140,27 +143,26 @@ impl TestRig {
 
 		self.wait().await;
 
-		let new_stats = self.read_daemon_stats().await.unwrap();
+		let new_stats = self.read_daemon_stats().unwrap();
+
+		let post_bytes = self.read_block_device_write_sectors() as u128 * common::SECTOR_SIZE;
 
 		let bytes_written = new_stats.total_bytes_written - initial_stats.total_bytes_written;
+		let bytes_written_theory = post_bytes - initial_bytes;
 
-		let bytes_written_theory: u128 = match units {
-			"M" => bytes * 1024 * 1024,
-			"k" => bytes * 1024,
-			&_ => todo!(),
-		};
-
-		let diff =
+		let mut diff =
 			(bytes_written as i128 - bytes_written_theory as i128) / common::SECTOR_SIZE as i128;
+
+		diff = diff.abs();
 
 		self.clean().await;
 
 		assert!(
-			diff.abs() <= ((bytes_written_theory/common::SECTOR_SIZE) as f64 *0.1) as i128,
-			"Sector difference larger than 10%, Wrote {} but app logged {}, diff is {} in sectors {}",
+			diff < 2 as i128,
+			"Sector difference larger than 1 sectors, Wrote {} but app logged {}, diff is {} in sectors {}",
 			bytes_written_theory,
 			bytes_written,
-			diff*common::SECTOR_SIZE as i128,
+			diff * common::SECTOR_SIZE as i128,
 			diff,
 		);
 
@@ -170,7 +172,7 @@ impl TestRig {
 		);
 	}
 
-	async fn read_daemon_stats(&self) -> Result<DeviceEntry> {
+	fn read_daemon_stats(&self) -> Result<DeviceEntry> {
 		let mut file = fs::File::open(&self.stats_file_path)?;
 		let mut contents = Vec::new();
 		file.read_to_end(&mut contents)?;
@@ -180,6 +182,31 @@ impl TestRig {
 
 		let device_entry = stats.values().next().expect("No entries found!").clone();
 		Ok(device_entry)
+	}
+
+	fn read_block_device_write_sectors(&self) -> u64 {
+		let dev = common::get_dev();
+		let dev_stripped = dev
+			.strip_prefix("/dev/")
+			.ok_or(anyhow::anyhow!(" no /dev prefix !"))
+			.expect("No dev name !")
+			.to_string();
+		let dev_stat_path = format!("{}{}{}", "/sys/block/", &dev_stripped, "/stat");
+		let path: &Path = Path::new(&dev_stat_path);
+
+		assert!(
+			path.exists(),
+			"Path: {} does not exist - check your .env file",
+			dev_stat_path,
+		);
+
+		let file = fs::read_to_string(path).unwrap();
+		let contents: Vec<String> = file.split_whitespace().map(String::from).collect();
+
+		// write secotrs are at index 6
+		let write_sectors = contents[6].trim().parse::<u64>().unwrap_or_default();
+
+		write_sectors
 	}
 }
 

@@ -59,8 +59,9 @@ pub fn get_dev() -> String {
 }
 
 pub fn get_dev_mount() -> String {
-	let device = std::env::var("TEST_CONFIG_MMCBLK_DEV_MOUNT")
-		.expect("TEST_CONFIG_MMCBLK_DEV_MOUNT environment variable must be set eg. /media/loop1 for the DUT");
+	let device = std::env::var("TEST_CONFIG_MMCBLK_DEV_MOUNT").expect(
+		"TEST_CONFIG_MMCBLK_DEV_MOUNT environment variable must be set eg. /media/loop1 for the DUT",
+	);
 
 	assert!(!device.is_empty());
 
