@@ -94,6 +94,7 @@ impl BlockStats {
 				self,
 				"Prev stats larger than current stats, this should not happen !"
 			);
+			return;
 		}
 		*self += current_stats - prev_stats;
 	}
