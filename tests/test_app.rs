@@ -114,8 +114,7 @@ impl TestRig {
 
 		let initial_stats = self.read_daemon_stats().unwrap();
 
-		let initial_bytes =
-			self.read_block_device_write_sectors().unwrap() as u128 * common::SECTOR_SIZE;
+		let initial_bytes = self.read_block_device_write_sectors() as u128 * common::SECTOR_SIZE;
 
 		assert!(units == "M" || units == "k");
 
