@@ -86,7 +86,7 @@ impl KrillKounter {
 				let mut entry = device_entry.clone();
 				let serial = serial.clone();
 
-				task::spawn(async move {
+				task::spawn_blocking(move || {
 					// We check for None in update_devices_stats below, hence it is ok to use ok() here to convert from Result to Option.
 					let current_stat = entry.get_new_stats().ok();
 					(serial, current_stat)
