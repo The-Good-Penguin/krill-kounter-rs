@@ -16,7 +16,7 @@ path = "src/main.rs"
 name = "krill-kounter-rs"
 
 [dependencies]
-anyhow = "1.0.79"
+anyhow = "1.0.103"
 clap = { version = "4.5.0", features = ["derive"] }
 futures = "0.3"
 fs-err = "3.1.2"
@@ -37,3 +37,8 @@ dotenvy = "0.15"
 [lints.clippy]
 pedantic = { level = "deny", priority = -1 }
 implicit_hasher = "allow"
+
+[profile.release]
+strip = true
+lto = true
+panic = "abort"
